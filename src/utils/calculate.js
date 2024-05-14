@@ -26,3 +26,8 @@ export function calculateInterest(loanAmt, interestRate, loanDuration, courseDur
 export function totalAmount(loanAmt, interestRate, loanDuration, courseDuration, gracePeriod) {
     return loanAmt + calculateInterest(loanAmt, interestRate, loanDuration, courseDuration, gracePeriod);
 }
+
+export function calculateSavings(annualSalary,emi,year) {
+    let savings = annualSalary - (emi * 12);
+    return savings * year;
+}

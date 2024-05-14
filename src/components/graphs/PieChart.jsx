@@ -35,7 +35,7 @@ const PieChart = ({details}) => {
 
     return (
         <>
-            <Pie data = {data} options={config}/>
+            <Pie data = {data} options={config.options}/>
         </>
         
     )

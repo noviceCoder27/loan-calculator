@@ -3,6 +3,8 @@ import { useState } from 'react'
 import InputField from './InputField'
 import { calculateEmi, calculateInterest, totalAmount } from '../utils/calculate'
 import PieChart from './graphs/PieChart'
+import LineChart from './graphs/LineChart'
+import { convertNum } from '../utils/convertNumber'
 
 const Calculator = () => {
 
@@ -11,8 +13,15 @@ const Calculator = () => {
         interest: 1,
         loanDuration: 1,
         courseDuration: 1,
-        gracePeriod: 1
+        gracePeriod: 1,
+        annualSalary: 100000,
+        years: 5
     })
+
+    const emi = calculateEmi(Number(details.loanAmt),Number(details.interest),Number(details.loanDuration),Number(details.courseDuration),Number(details.gracePeriod));
+    const interest = calculateInterest(Number(details.loanAmt),Number(details.interest),Number(details.loanDuration),Number(details.courseDuration),Number(details.gracePeriod));
+    const total = totalAmount(Number(details.loanAmt),Number(details.interest),Number(details.loanDuration),Number(details.courseDuration),Number(details.gracePeriod));
+
 
     return (
         <Box mt = "4rem" bg = "white" p = "2rem" w = {{base: "100%", md: "80%"}} rounded = "20px" pb= "3rem"> 
@@ -27,6 +36,20 @@ const Calculator = () => {
                         loan = {true} 
                         text = "₹" 
                         label = "Loan Amount" 
+                        sliderDefault = {100000} 
+                        sliderMin = {100000} 
+                        sliderMax = {10000000} 
+                        sliderStep = {100000}
+                        />
+                    </Box>
+                    <Box p = "1rem 2rem" shadow= "rgba(149, 157, 165, 0.2) 0px 8px 24px" rounded = "10px">
+                        <InputField 
+                        details = {details.annualSalary} 
+                        objKey = "annualSalary"
+                        setDetails = {setDetails} 
+                        loan = {true} 
+                        text = "₹" 
+                        label = "Annual Salary" 
                         sliderDefault = {100000} 
                         sliderMin = {100000} 
                         sliderMax = {10000000} 
@@ -89,18 +112,32 @@ const Calculator = () => {
                         sliderStep = {1}
                         />
                     </Box>
+                    <Box p = "1rem 2rem" shadow= "rgba(149, 157, 165, 0.2) 0px 8px 24px" rounded = "10px">
+                        <InputField 
+                        details = {details.years} 
+                        objKey = "years"
+                        setDetails = {setDetails} 
+                        loan = {false} 
+                        text = "Years" 
+                        label = "Time Period" 
+                        sliderDefault = {5} 
+                        sliderMin = {5} 
+                        sliderMax = {20} 
+                        sliderStep = {1}
+                        />
+                    </Box>
                 </Flex>
-                <Flex direction = "column" alignItems= "center" flexGrow= "1">
+                <Flex direction = "column" alignItems= "center" justifyContent = "center" flexGrow= "1">
                     <Flex gap = "2rem" fontWeight= "600" fontSize = "1.2rem" flexWrap= "wrap">
                         <Box>
                             <Container>
                                 <Text color = "slategrey">Principal Amount</Text>
-                                <Text>₹ {details.loanAmt}</Text>
+                                <Text>₹ {convertNum(details.loanAmt)}</Text>
                             </Container>
                             <Container mt= "2rem">
                                 <Text color = "slategrey">Total Interest</Text>
                                 <Text>
-                                    ₹ {calculateInterest(Number(details.loanAmt),Number(details.interest),Number(details.loanDuration),Number(details.courseDuration),Number(details.gracePeriod))}
+                                    ₹ {convertNum(interest)}
                                 </Text>
                             </Container>
                         </Box>
@@ -108,22 +145,26 @@ const Calculator = () => {
                             <Container>
                                 <Text color = "slategrey">Total Amount</Text>
                                 <Text>
-                                    ₹ {totalAmount(Number(details.loanAmt),Number(details.interest),Number(details.loanDuration),Number(details.courseDuration),Number(details.gracePeriod))}
+                                    ₹ {convertNum(total)}
                                 </Text>
                             </Container>
                             <Container mt= "2rem">
                                 <Text color = "slategrey">Montly EMI</Text>
                                 <Text>
-                                    ₹ {calculateEmi(Number(details.loanAmt),Number(details.interest),Number(details.loanDuration),Number(details.courseDuration),Number(details.gracePeriod))}
+                                    ₹ {convertNum(emi)}
                                 </Text>
                             </Container>
                         </Box>
                     </Flex>
                     <Box mt = "3rem">
                         <PieChart details = {details}/>
+                        <Text textAlign= "center" fontWeight= "500" color = "slategray" mt = "2rem">Graph Representation <br /> Of <br/>Loan and Interest</Text>
                     </Box>
                 </Flex>
             </Flex>
+            <Box mt = "3rem" w = {{base:"100%", md: "50%"}} ml = "auto" mr = "auto" p = "2" boxShadow="md">
+                <LineChart details = {details} />
+            </Box>
         </Box>
     )
 }
