@@ -36,7 +36,7 @@ Follow these steps to run the project:
 
 
 
-That's it! Your School Management project should now be running.
+That's it! Your Loan Calculator project should now be running.
 
 # Charts
 
